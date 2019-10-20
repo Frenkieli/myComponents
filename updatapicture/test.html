@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        var ImageEditor = function () {
+            // 用離線canvas處理圖片資料
+            this.canvas = document.createElement('canvas');
+            this.context = this.canvas.getContext('2d');
+        };
+        var fn = ImageEditor.prototype;
+        fn.resizeCanvas = function (width, height) {
+            this.canvas.width = width;
+            this.canvas.height = height;
+        };
+        fn.clipSquareImage = function (url, callback) {
+            var that = this,
+                img = new Image();
+            img.src = url;
+            img.onload = function () {
+                // 取寬高最小值作為正方形邊長
+                var eLength = Math.min(img.width, img.height),
+                    picture = img;
+                // canvas不支援區域性截圖，截圖前必須先調節canvas的寬高
+                that.resizeCanvas(eLength, eLength);
+                // 將圖片以居中裁剪的方式畫到canvas中。
+                // drawImage支援9個引數：圖片物件，圖片上的剪下座標XY，
+                // 剪下寬高，圖片在canvas上的座標XY及圖片寬高
+                that.context.drawImage(picture,
+                    (picture.width - eLength) / 2, (picture.height - eLength) / 2,
+                    eLength, eLength, 0, 0, eLength, eLength);
+                // 截圖，即獲取base64資料
+                callback.call(that, that.canvas.toDataURL('image/png'));
+            };
+        };
+    </script>
+</body>
+
+</html>

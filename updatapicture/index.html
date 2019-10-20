@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            width: 500px;
+        }
+
+        input {
+            display: none;
+        }
+
+        canvas {
+            display: block;
+            width: 80%;
+            margin: auto;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='test'></div>
+    <label for="updata"><img id='forChange' src="pic1.png" alt="原圖"></label>
+    <canvas id="forDraw"></canvas>
+    <h1>點上面觸發上傳事件重新渲染加壓縮成下圖(png=>jpg(圖檔大小也要變更))</h1>
+    <input type="file" name="updata" id="updata">
+    <br>
+    <img id='toSee' src="pic2.png" alt="被上傳的圖">
+    <script>
+        let forChange = document.getElementById('forChange');
+        document.getElementById('updata').addEventListener('change', upData);
+        function upData(e) {
+            let fileAccepts = ["png", "jpg", "jpeg", "gif"];
+            let fileInfo = getFileInfo(e.target.value);
+            if (fileAccepts.indexOf(fileInfo.ext.toLowerCase()) == -1) {
+                alert("檔案格式不對");
+                e.target.value = "";
+            } else {
+                let pic = document.getElementById("updata").files[0];
+                let canvas = document.getElementById("forDraw");
+                let context = canvas.getContext("2d")
+                let readpic = new FileReader();
+                // console.log(readpic);
+
+                readpic.readAsDataURL(pic);
+                readpic.addEventListener("load", function () {
+                    console.log(readpic);
+                    forChange.src = this.result;
+                    let img = new Image();
+                    img.src = this.result;
+                    img.onload = function () {
+                        // let Max = Math.min(img.width, img.height);
+                        // // console.log(Max);
+                        // // context.width=Max;
+                        // １.拿到圖片依照切出自己要的部分進行使用
+                        // MaxWith = img.width <= 600 ? img.width : 600;
+                        // MaxHeight = img.height <= 400 ? img.height : 400;
+                        // canvas.width = MaxWith;
+                        // canvas.height = MaxHeight;
+                        // context.drawImage(img, (img.width - MaxWith) / 2, (img.height - MaxHeight) / 2, MaxWith, MaxHeight, 0, 0, MaxWith, MaxHeight);
+                        // context.drawImage(img, 0, 0, img.width, img.height);
+                        // 上方單純切圖後變成指定大小
+
+                        // ２.等比例縮放圖片尺寸
+                        // let newWidth = 300;
+                        // let width = img.width;
+                        // let height = img.height;
+                        // if(newWidth<width){
+                        //     newWidth = width;
+                        // }
+                        // let newHeight = newWidth * height / width ;
+                        // context.drawImage(img,(width - newWidth) /2,(height - newHeight) /2,newWidth,newHeight, 0 , 0 ,newWidth,newHeight);
+                        // ３.破壞圖片比例後重畫到畫面上
+                        canvas.width = 600;
+                        canvas.height = 400;
+                        context.drawImage(img, 0, 0, 600, 400);
+                        // canvas.width = 300;
+                        // canvas.height = 200;
+                        // // 下方是壓縮後輸出
+                        console.log(canvas.toDataURL('image/jpeg', 0.8));
+                        // 很長的圖片還是很長阿，真的單純壓縮阿
+                        document.getElementById('toSee').src = canvas.toDataURL('image/jpeg', 0.65);
+                    }
+                });
+            }
+        }
+        //抓賞單圖檔檔名，副檔名
+        function getFileInfo(fileStr) {
+            //回傳一個陣列，索引0放的是主檔名, 索引1放的是副檔名
+            let dotPos = fileStr.lastIndexOf(".");
+            let fileName = fileStr.substring(0, dotPos);
+            let fileExt = fileStr.substr(dotPos + 1);
+
+            let file = {
+                name: fileName,
+                ext: fileExt
+            };
+            return file;
+        }
+    </script>
+</body>
+
+</html>
