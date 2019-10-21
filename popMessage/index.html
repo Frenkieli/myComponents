@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>彈窗提示</title>
+</head>
+
+<body>
+    <script>
+        let i = 0 ;
+        setInterval(() => {
+            i++;
+            popMessage(i,i%2);
+        }, 500);
+
+        function popMessage(str, status) {
+            // console.log("有近來");
+            // 可在這邊進行狀態的追加
+            let statusBackColor = ['#1CAF64', '#AF1C1C'];
+            let statusColor = ['#eee', '#eee'];
+            // 在這邊追加狀態顯示
+            let popMessage;
+            if (document.getElementById("popMessage")) {
+                popMessage = document.getElementById("popMessage");
+            } else {
+                popMessage = document.createElement("div");
+                let boxStyle = popMessage.style;
+                popMessage.id = "popMessage";
+                boxStyle.position = "fixed";
+                boxStyle.right = "50px";
+                boxStyle.bottom = "50px";
+            }
+            // 這邊是將訊息放進來
+            let popStr = document.createElement("div");
+            let style = popStr.style;
+            popStr.innerText = str;
+            style.backgroundColor = statusBackColor[status];
+            style.color = statusColor[status];
+            style.border = "1px solid rgba(0,0,0,0.8)";
+            style.padding = "10px";
+            style.position = "relative";
+            style.margin = "10px";
+            style.fontSize = "30px";
+            let count = -100;
+            let timeClock = setInterval(() => {
+                count += 2;
+                style.right = count + "%";
+                if (count >= 0) {
+                    clearInterval(timeClock);
+                }
+            }, 1);
+            let count2 = 100;
+            setTimeout(() => {
+                let timeClock2 = setInterval(() => {
+                    count2 -= 10;
+                    style.opacity = count2 / 100;
+                    if (count2 <= 0) {
+                        clearInterval(timeClock2);
+                        popStr.remove();
+                    }
+                }, 50);
+            }, 1000);
+            // 放進去
+            popMessage.appendChild(popStr);
+            document.getElementsByTagName("body")[0].appendChild(popMessage);
+        }
+    </script>
+</body>
+
+</html>

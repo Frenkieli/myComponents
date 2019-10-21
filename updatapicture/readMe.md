@@ -16,3 +16,28 @@ https://www.wfublog.com/2019/06/js-compress-resize-image-canvas.html
 
 深入研究HTML5 canvas實現圖片壓縮上傳(方法三)
 https://www.itread01.com/p/656132.html
+
+壓縮後確認檔案大小的方法
+
+            // 破壞圖片比例後重畫到畫面上
+            canvas.width = 600;
+            canvas.height = 400;
+            context.drawImage(img, 0, 0, 600, 400);
+            // // 下方是壓縮後輸出
+            let pre;
+            // 確認要壓縮多少
+            if(canvas.toDataURL('image/jpeg', 0.8.length) <(131072-1024)){
+              pre = 0.8;
+            }else if(canvas.toDataURL('image/jpeg', 0.6).length <(131072-1024)){
+              pre = 0.6;
+            }else if(canvas.toDataURL('image/jpeg', 0.5).length <(131072-1024)){
+              pre = 0.5;
+            }else if(canvas.toDataURL('image/jpeg', 0.3).length <(131072-1024)){
+              pre = 0.3;
+            }else{
+              pre = 0.1;
+            }
+            $.src = canvas.toDataURL('image/jpeg', pre);
+            // 壓縮完成後輸出
+
+ 主要是使用字串查度做檢查
