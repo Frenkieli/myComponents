@@ -21,15 +21,15 @@
         })
         document.getElementById('ok').addEventListener('click', function () {
             console.log(popMessage);
-            popMessage.ok('可以喔');
+            popMessage.ok('可以喔' , 2000);
         });
         document.getElementById('err').addEventListener('click', function () {
             console.log(popMessage);
-            popMessage.err('不行喔');
+            popMessage.err('不行喔' , 2000);
         });
         document.getElementById('cus').addEventListener('click', function () {
             console.log(popMessage);
-            popMessage.cus('客製化',1);
+            popMessage.cus('客製化',1 , 2000);
         });
     </script>
 </body>
