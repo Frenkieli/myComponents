@@ -5,6 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    path{
+      transition: 0.2s;
+    }
+  </style>
 </head>
 
 <body>
@@ -17,78 +22,88 @@
     // 吐回各自可點擊的區塊
     // 滑過會稍微放大
     // 
+    var data = [2, 4, 8, 10];
+    var data = [
+      { name: 'li', value: 2 },
+      { name: 'yu', value: 4 },
+      { name: 'gg', value: 6 },
+      { name: 'ff', value: 8 },
+      { name: 'zz', value: 10 }];
 
-    // var requestURL = 'C-A0024-001.json';
-    // var request = new XMLHttpRequest();
-    // request.open('GET', requestURL);
-    // request.responseType = 'json';
-    // request.send();
-
-    // request.onload = function() {
-    //   var superHeroes = request.response;
-    //   console.log(superHeroes);
-    // }
-
-    window.addEventListener('load', async function () {
-      // let transform = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
-      // let result = await axiosItem.get('doughnutData.json');
-      // console.log(result);
-      // let forChart = new doughnutChart();
-      // let data     = [];
-      // result.data.forEach((value,i)=>{
-      //   data.push({
-      //     title : transform[i],
-      //     unit  : '度',
-      //     value  : value.kWh
-      //   })
-      // })
-      // forChart.chart(document.getElementById('svg'),data);
-      let data = [{"name":"<5","value":19912018},{"name":"5-9","value":20501982},{"name":"10-14","value":20679786},{"name":"15-19","value":21354481},{"name":"20-24","value":22604232},{"name":"25-29","value":21698010},{"name":"30-34","value":21183639},{"name":"35-39","value":19855782},{"name":"40-44","value":20796128},{"name":"45-49","value":21370368},{"name":"50-54","value":22525490},{"name":"55-59","value":21001947},{"name":"60-64","value":18415681},{"name":"65-69","value":14547446},{"name":"70-74","value":10587721},{"name":"75-79","value":7730129},{"name":"80-84","value":5811429},{"name":"≥85","value":5938752}];
-      let color = d3.scaleOrdinal()
-    .domain(data.map(d => d.name))
-    .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+    let width = 500;
     let height = Math.min(width, 500)
-    let arc = {
-  const radius = Math.min(width, height) / 2;
-  return d3.arc().innerRadius(radius * 0.67).outerRadius(radius - 1);
-}
-      function chart() {
+    const svg = d3.select("svg")
+      .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    let = radius = Math.min(width, height) / 2;
+    let = radiusin = Math.min(width, height) / 4;
 
-        const arcs = pie(data);
 
-        const svg = d3.create("svg")
-          .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    color = d3.scaleOrdinal()
+      .domain(data.map(d => d.name))
+      .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
 
-        svg.selectAll("path")
-          .data(arcs)
-          .join("path")
-          .attr("fill", d => color(d.data.name))
-          .attr("d", arc)
-          .append("title")
-          .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+    // Generate the pie
+    var pie = d3.pie()
+      .sort(null)
+      .value(d => d.value)
 
-        svg.append("g")
-          .attr("font-family", "sans-serif")
-          .attr("font-size", 12)
-          .attr("text-anchor", "middle")
-          .selectAll("text")
-          .data(arcs)
-          .join("text")
-          .attr("transform", d => `translate(${arc.centroid(d)})`)
-          .call(text => text.append("tspan")
-            .attr("y", "-0.4em")
-            .attr("font-weight", "bold")
-            .text(d => d.data.name))
-          .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
-            .attr("x", 0)
-            .attr("y", "0.7em")
-            .attr("fill-opacity", 0.7)
-            .text(d => d.data.value.toLocaleString()));
+    // Generate the arcs
+    var arc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(Math.min(width, height) / 4);
+    var bigArc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(Math.min(width, height) / 3);
 
-        return svg.node();
-      }
-    })
+    // arcLabel = function () {
+    //   const radius = Math.min(width, height) / 2 * 0.8;
+    //   return d3.arc().innerRadius(radius).outerRadius(radius);
+    // }
+    //Generate groups
+    let llll = d3.map(data, function (d) { return d.value })
+    console.log(llll.values(), llll);
+    const arcs = pie(data);
+    //Draw arc paths
 
+    svg.append("g")
+      .attr("stroke", "white")
+      .selectAll("path")
+      .data(arcs)
+      .join("path")
+      .on('click', function (d) {
+        console.log(d.data)
+      })
+      .on('mouseenter',function(){
+        d3.select(this).attr("d", bigArc);
+      })
+      .on('mouseleave',function(){
+        d3.select(this).attr("d", arc);
+      })
+      .attr("fill", d => color(d.data.name))
+      .attr("d", arc)
+      .append("title")
+      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+
+    svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 12)
+      .attr("text-anchor", "middle")
+      .selectAll("text")
+      .data(arcs)
+      .join("text")
+      .attr("transform", function (d) {
+        var c = arc.centroid(d);
+        return "translate(" + c[0] * 1.5 + "," + c[1] * 1.5 + ")";
+      })
+      .call(text => text.append("tspan")
+        .attr("y", "-0.4em")
+        .attr("font-weight", "bold")
+        .text(d => d.data.name))
+      .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
+        .attr("x", 0)
+        .attr("y", "0.7em")
+        .attr("fill-opacity", 0.7)
+        .text(d => d.data.value.toLocaleString()));
   </script>
 
 </body>
