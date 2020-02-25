@@ -4,4 +4,6 @@
 
 axiosItem.get('C-A0024-001.json');
 
-就可以使用
+就可以使用了
+
+header參數之後再加進去

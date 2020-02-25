@@ -6,14 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    path{
-      transition: 0.2s;
+    .container{
+      position: relative;
+      margin: auto;
+      width: 40%;
+      padding-bottom: 40%;
+    }
+    #svg{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
 
 <body>
-  <svg id="svg"></svg>
+  <div class="container">
+    <svg id="svg"></svg>
+  </div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js'></script>
   <script src="../../axiosItem/axiosItem.js"></script>
@@ -21,89 +35,131 @@
   <script>
     // 吐回各自可點擊的區塊
     // 滑過會稍微放大
-    // 
-    var data = [2, 4, 8, 10];
+    
     var data = [
-      { name: 'li', value: 2 },
-      { name: 'yu', value: 4 },
-      { name: 'gg', value: 6 },
-      { name: 'ff', value: 8 },
-      { name: 'zz', value: 10 }];
+      { name: '一月', value: 8 },
+      { name: '二月', value: 4 },
+      { name: '三月', value: 6 },
+      { name: '四月', value: 8 },
+      { name: '五月', value: 10 },
+      { name: '六月', value: 10 },
+      { name: '七月', value: 10 },
+      { name: '八月', value: 10 },
+      { name: '九月', value: 10 },
+      { name: '十月', value: 10 },
+      { name: '十一月', value: 10 },
+      { name: '十二月', value: 10 }];
+    
 
-    let width = 500;
-    let height = Math.min(width, 500)
-    const svg = d3.select("svg")
-      .attr("viewBox", [-width / 2, -height / 2, width, height]);
-    let = radius = Math.min(width, height) / 2;
-    let = radiusin = Math.min(width, height) / 4;
+    let doughnut_Chart = new doughnutChart();
+    doughnut_Chart.init(document.getElementById('svg'), data);
+    doughnut_Chart.doughnut();
 
 
-    color = d3.scaleOrdinal()
-      .domain(data.map(d => d.name))
-      .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+    // var total = 0;
+    // data.forEach(v => {
+    //   total += v.value;
+    // })
+    // let width = 500;
+    // let height = Math.min(width, 500);
+    // const svg = d3.select("svg")
+    //   .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    // let radius = Math.min(width, height) / 2;
+    // let radiusin = Math.min(width, height) / 4;
 
-    // Generate the pie
-    var pie = d3.pie()
-      .sort(null)
-      .value(d => d.value)
 
-    // Generate the arcs
-    var arc = d3.arc()
-      .innerRadius(0)
-      .outerRadius(Math.min(width, height) / 4);
-    var bigArc = d3.arc()
-      .innerRadius(0)
-      .outerRadius(Math.min(width, height) / 3);
+    // color = d3.scaleOrdinal()
+    //   .domain(data.map(d => d.name))
+    //   .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
+    //   console.log(color);
+    // // Generate the pie
+    // var pie = d3.pie()
+    //   .sort(null)
+    //   .value(d => d.value)
 
-    // arcLabel = function () {
-    //   const radius = Math.min(width, height) / 2 * 0.8;
-    //   return d3.arc().innerRadius(radius).outerRadius(radius);
-    // }
-    //Generate groups
-    let llll = d3.map(data, function (d) { return d.value })
-    console.log(llll.values(), llll);
-    const arcs = pie(data);
-    //Draw arc paths
+    // // Generate the arcs
+    // var arc = d3.arc()
+    //   .innerRadius(Math.min(width, height) / 6)
+    //   .outerRadius(Math.min(width, height) / 3);
+    // var bigArc = d3.arc()
+    //   .innerRadius(Math.min(width, height) / 8)
+    //   .outerRadius(Math.min(width, height) / 2.6);
 
-    svg.append("g")
-      .attr("stroke", "white")
-      .selectAll("path")
-      .data(arcs)
-      .join("path")
-      .on('click', function (d) {
-        console.log(d.data)
-      })
-      .on('mouseenter',function(){
-        d3.select(this).attr("d", bigArc);
-      })
-      .on('mouseleave',function(){
-        d3.select(this).attr("d", arc);
-      })
-      .attr("fill", d => color(d.data.name))
-      .attr("d", arc)
-      .append("title")
-      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+    // // arcLabel = function () {
+    // //   const radius = Math.min(width, height) / 2 * 0.8;
+    // //   return d3.arc().innerRadius(radius).outerRadius(radius);
+    // // }
+    // //Generate groups
 
-    svg.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 12)
-      .attr("text-anchor", "middle")
-      .selectAll("text")
-      .data(arcs)
-      .join("text")
-      .attr("transform", function (d) {
-        var c = arc.centroid(d);
-        return "translate(" + c[0] * 1.5 + "," + c[1] * 1.5 + ")";
-      })
-      .call(text => text.append("tspan")
-        .attr("y", "-0.4em")
-        .attr("font-weight", "bold")
-        .text(d => d.data.name))
-      .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
-        .attr("x", 0)
-        .attr("y", "0.7em")
-        .attr("fill-opacity", 0.7)
-        .text(d => d.data.value.toLocaleString()));
+    // const arcs = pie(data);
+    // //Draw arc paths
+
+    // svg.append("g")
+    //   .attr("stroke", "white")
+    //   .selectAll("path")
+    //   .data(arcs)
+    //   .join("path")
+    //   .on('click', function (d) {
+    //     console.log(d.data)
+    //   })
+    //   .on('mouseenter', function () {
+    //     d3.select(this).transition().duration(200).attr("d", bigArc);
+    //   })
+    //   .on('mouseleave', function () {
+    //     d3.select(this).transition().duration(200).attr("d", arc);
+    //   })
+    //   .attr("fill", d => color(d.data.name))
+    //   .attr("d", arc)
+    //   .append("title")
+    //   .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+
+    // svg.append("g")
+    //   .attr("font-family", "sans-serif")
+    //   .attr("font-size", 12)
+    //   .attr("text-anchor", "middle")
+    //   .selectAll("text")
+    //   .data(arcs)
+    //   .join("text")
+    //   .attr("transform", function (d) {
+    //     var c = arc.centroid(d);
+    //     return "translate(" + c[0] * 1.2 + "," + c[1] * 1.2 + ")";
+    //   })
+    //   .call(text => text.append("tspan")
+    //     .attr("y", "-0.4em")
+    //     .attr("font-weight", "bold")
+    //     .text(d => d.data.name))
+    //   .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
+    //     .attr("x", 0)
+    //     .attr("y", "0.7em")
+    //     .attr("fill-opacity", 0.7)
+    //     .text(d => d.data.value.toLocaleString()));
+    // let text = svg.append('g')
+    //   .attr('id', 'center')
+    //   .append('text')
+    //   .attr("x" , '0')
+    //   .attr("font-family", "sans-serif")
+    //   .attr("font-size", 16)
+    //   .attr("font-weight", "bold")
+    //   .attr("fill", "#111")
+    //   .attr("text-anchor", "middle")
+    //   .attr("vertical-align", "bottom")
+    // text.append('tspan')
+    //   .attr("x",text.attr("x")) 
+    //   .attr("dy","0em") 
+    //   .text('總數');
+    // text.append('tspan')
+    //   .attr("x",text.attr("x")) 
+    //   .attr("dy","1em") 
+    //   .text(total);
+    // d3.select('#center')
+    //   .insert('rect', 'text')
+    //   .attr("transform", function (d) {
+    //     var attr = this.parentNode.getBoundingClientRect();
+    //     return "translate(-" + Math.floor(attr.width / 2) + ",-" + Math.floor(attr.height / 2) + ")";
+    //   })
+    //   .attr('fill', '#fff')
+    //   .style('width', function () { return (this.parentNode.getBoundingClientRect().width) })
+    //   .style('height', function () { return (this.parentNode.getBoundingClientRect().height) });
   </script>
 
 </body>
