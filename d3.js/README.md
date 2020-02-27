@@ -15,6 +15,7 @@ pie
 Bar
 
 Horizontal Bar
+(請再參考:https://mlog.club/article/2571421)
 
 為接下來要製作的
 

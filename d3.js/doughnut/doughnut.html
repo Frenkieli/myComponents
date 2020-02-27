@@ -9,8 +9,8 @@
     .container{
       position: relative;
       margin: auto;
-      width: 40%;
-      padding-bottom: 40%;
+      width: 100%;
+      height: 70vh;
     }
     #svg{
       position: absolute;
@@ -42,18 +42,19 @@
       { name: '三月', value: 6 },
       { name: '四月', value: 8 },
       { name: '五月', value: 10 },
-      { name: '六月', value: 10 },
-      { name: '七月', value: 10 },
-      { name: '八月', value: 10 },
-      { name: '九月', value: 10 },
-      { name: '十月', value: 10 },
-      { name: '十一月', value: 10 },
-      { name: '十二月', value: 10 }];
+      { name: '六月', value: 12 },
+      { name: '七月', value: 14 },
+      { name: '八月', value: 9 },
+      { name: '九月', value: 3 },
+      { name: '十月', value: 2 },
+      { name: '十一月', value: 6 },
+      { name: '十二月', value: 5 }];
     
 
     let doughnut_Chart = new doughnutChart();
     doughnut_Chart.init(document.getElementById('svg'), data);
     doughnut_Chart.doughnut();
+    // doughnut_Chart.bar();
 
 
     // var total = 0;

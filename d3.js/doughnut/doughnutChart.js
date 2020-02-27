@@ -13,6 +13,8 @@ class doughnutChart{
     this.arc;
     this.bigArc;
     this.arcs;
+    this.minvalue;
+    this.maxvalue;
   }
   init(element, data){
     let $this       = this;
@@ -38,6 +40,16 @@ class doughnutChart{
                         .innerRadius($this.minSide / 8)
                         .outerRadius($this.minSide / 2);
     $this.arcs      = $this.pie(data);
+    $this.minvalue   = $this.data[0].value;
+    $this.maxvalue   = $this.data[0].value;
+    $this.data.forEach(v=>{
+      if(v.value > $this.maxvalue){
+        $this.maxvalue = v.value;
+      }
+      if(v.value < $this.minvalue){
+        $this.minvalue = v.value;
+      }
+    })
   }
   doughnut(){
     let $this       = this;
@@ -47,7 +59,7 @@ class doughnutChart{
       total += v.value;
     })
     svg.append("g")
-      .attr('transform' , 'translate('+ ($this.minSide / 2)+','+ ($this.minSide / 2) +')')
+      .attr('transform' , 'translate('+ ($this.width / 2)+','+ ($this.height / 2) +')')
       .attr("stroke", "white")
       .selectAll("path")
       .data($this.arcs)
@@ -67,7 +79,7 @@ class doughnutChart{
       .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
 
     svg.append("g")
-      .attr('transform' , 'translate('+ ($this.minSide / 2)+','+ ($this.minSide / 2) +')')
+      .attr('transform' , 'translate('+ ($this.width / 2)+','+ ($this.height / 2) +')')
       .attr("font-family", "sans-serif")
       .attr("font-size", 20)
       .attr("text-anchor", "middle")
@@ -89,7 +101,7 @@ class doughnutChart{
       .text(d => d.data.value.toLocaleString()));
 
     let text = svg.append('g')
-                  .attr('transform' , 'translate('+ ($this.minSide / 2)+','+ ($this.minSide / 2) +')')
+                  .attr('transform' , 'translate('+ ($this.width / 2)+','+ ($this.height / 2) +')')
                   .attr('id', 'center')
                   .append('text')
                   .attr("x" , '0')
@@ -107,6 +119,78 @@ class doughnutChart{
       .attr("x",text.attr("x")) 
       .attr("dy","1em") 
       .text(total);
+  }
+
+  bar(){
+    let $this   = this;
+    let svg = $this.svg; 
+    var scaleX = d3.scaleLinear()
+      .range([0, $this.width])
+      .domain([0, 9]);
+
+    var scaleY = d3.scaleLinear()
+      .range([$this.height, 0])
+      .domain([1, $this.data.length + 1]);
+
+    // var axisX = d3.svg.axis()
+    //   .scale(scaleX)
+    //   .ticks(10)
+    //   .orient('bottom')
+    //   .tickFormat(d => d + 'n');
+    let interpolate = d3.interpolate($this.minvalue, $this.maxvalue)
+    console.log(interpolate(0))
+    var axisX = d3.axisBottom(scaleX)
+      .tickFormat(d => interpolate(d))
+      .tickPadding(-2);
+
+    var axisXGrid = d3.axisBottom(scaleX)
+      .ticks(10)
+      .tickFormat('')
+      .tickSize(-$this.height, 0);
+
+    var axisY = d3.axisRight(scaleY)
+      .ticks($this.data.length)
+      .tickFormat(d => d + "月");
+
+    var axisYGrid = d3.axisRight(scaleY)
+      .ticks($this.data.length)
+      .tickFormat('')
+      .tickSize($this.width, 0)
+
+
+
+
+    svg.append('g')
+      .call(axisX)
+      .attr('fill' , 'none')
+      .attr('stroke' , '#000')
+      .attr('transform' , 'translate(0,' + ($this.height - 10 - $this.height * 0.004573933344450533) +')');
+
+    svg.append('g')
+      .call(axisY)    
+      .attr('fill' , 'none')
+      .attr('stroke' , '#000')
+      .attr('transform' , 'translate(0, -40)');
+
+
+    svg.append('g')
+      .call(axisXGrid)
+      .attr('fill' , 'none')
+      .attr('stroke' , 'rgba(0,0,0,.1)')
+      .attr('transform' , 'translate(0,' + ($this.height - 10 - $this.height * 0.004573933344450533) + ')');
+    svg.append('g')
+      .call(axisYGrid)
+      .attr('fill' , 'none')
+      .attr('stroke' , 'rgba(0,0,0,.1)')
+      .attr('transform' , 'translate(0, ' +  ($this.height * -0.004573933344450533 - 10) + ')');
+    console.log($this.data)
+
+    svg.append('g')
+        .selectAll('rect')
+        .data($this.data)
+        .enter()
+        .append('rect')
+        .attr('x', scaleY)
   }
   // chart(element, data){
   //   let total = 0;
