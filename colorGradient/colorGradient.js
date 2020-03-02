@@ -1,8 +1,7 @@
-var randomColor = (function(){
-  let colorArray = [
-    {
+var randomColor = (function () {
+  let colorArray = [{
       "name": "Warm Flame",
-      "favorite": false,
+      "favorite": true,
       "index": "001",
       "deg": 45,
       "group": [
@@ -1574,7 +1573,9 @@ var randomColor = (function(){
       "favorite": false,
       "index": "076",
       "deg": 0,
-      "group": [],
+      "group": [
+        "#000000"
+      ],
       "gradient": [
         {
           "color": "#434343",
@@ -3690,12 +3691,50 @@ var randomColor = (function(){
     }
   ];
 
-  let _getColor = function(num){
-    
+  function random(max) {
+    return Math.floor(Math.random() * (max));
   }
 
+  function getColor(color, num) {
+    let data = [];
+    for (let i = 0; i < num; i++) {
+      data.push(color.splice(random(color.length), 1)[0]);
+      if (color.length == 0) break;
+    }
+    return data;
+  }
 
-  return{
-    getColor: _getColor
+  let _get = function (num) {
+    let color = [...colorArray];
+    return getColor(color, num);
+  }
+
+  let _getType = function (type, num) {
+    let group = ['#F9AFAD', '#FC96D3', '#8B56E9', '#259BE5', '#7BCC9B', '#E5E9EC', '#000000']
+    let quary = group[type];
+    let color = colorArray.filter(function (v) {
+      let check = false;
+      v.group.forEach(function (value) {
+        if (value == quary) {
+          check = true;
+          return;
+        }
+      })
+      return check;
+    })
+    return getColor(color, num);
+  }
+
+  let _getLike = function (num) {
+    let color = colorArray.filter(function (v) {
+      return v.favorite;
+    })
+    return getColor(color, num);
+  }
+
+  return {
+    get: _get,
+    getType: _getType,
+    getLike: _getLike
   }
 }())
