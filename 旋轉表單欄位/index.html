@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .section{
+      width: 100%;
+    }
+    .container{
+      width: 1200px;
+      margin: 0 auto;
+      font-size: 0;
+    }
+    .container>div{
+      position: relative;
+      width: 50%;
+      padding-bottom: 50%;
+      font-size: 16px;
+      display: inline-block;
+    }
+    #nav{
+      transition: 0.5s;
+    }
+    /* #nav::before{
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      height: 50%;
+      border-radius: 50%;
+      background-color: #fff;
+      z-index: 1;
+    } */
+    #nav svg{
+      position: absolute;
+    }
+    path{
+      transition: 0.5s;
+    }
+    .item{
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      width: 80px;
+      height: 80px;
+      transition: 0.5s;
+      cursor: pointer;
+    }
+    .item_span{
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transition: 0.5s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="section">
+    <div class="container">
+      <div id="nav">
+        <div class="item"><span class="item_span">about</span></div>
+        <div class="item"><span class="item_span">you</span></div>
+        <div class="item"><span class="item_span">me</span></div>
+        <div class="item"><span class="item_span">he</span></div>
+        <div class="item"><span class="item_span">she</span></div>
+        <div class="item"><span class="item_span">haha</span></div>
+        <div class="item"><span class="item_span">haha</span></div>
+        <div class="item"><span class="item_span">haha</span></div>
+        <div class="item"><span class="item_span">haha</span></div>
+        <div class="item"><span class="item_span">haha</span></div>
+        <div class="item"><span class="item_span">haha</span></div>
+      </div>
+      <div class="content"></div>
+    </div>
+  </div>
+  <script>
+    let color= ['#0af','#0fa','#af0','#f0a','#fa0','#a0f','#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
+    window.addEventListener('load',function(e){
+    
+    let nav = document.getElementById('nav');
+    let height = nav.offsetHeight;
+    let item = document.getElementsByClassName('item');
+    let item_span = document.getElementsByClassName('item_span');
+    let rotate = 360 / item.length;
+    let navRotate = 0;
+
+
+
+    // 畫SVG
+
+    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    let content = document.getElementsByClassName('content')[0];
+    // console.log(content.offsetWidth, content.offsetHeight)
+    svg.style.width = content.offsetWidth + 'px';
+    svg.style.height = content.offsetHeight + 'px';
+    let contentWidth = content.offsetWidth;
+    let contentHeight = content.offsetHeight;
+    svg.setAttributeNS('http://www.w3.org/2000/svg', 'width', contentWidth);
+    svg.setAttributeNS('http://www.w3.org/2000/svg', 'height', contentHeight);
+
+    nav.appendChild(svg);
+    // 
+    let pathElement = [];
+    for(let i = 0 ; i < item.length ; i++){
+      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('fill', color[i % color.length]);
+      // M 1461 3194 A1600 1600 0 0 0 1511 3197
+      let rr = 100;
+      path.setAttribute('d', describeArc(300,300, (height / 2 - 50) ,rotate * (i + 1) + 2.5 ,rotate * (i + 2 ) - 2.5));
+      svg.appendChild(path);
+      pathElement.push(path);
+      // console.log(item[i]);
+      // console.log('translate(-50% -50%) rotate(' + (rotate * i) + 'deg) translateY(' + ( height / 3 ) + 'px)');
+      item[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * i)) + 'deg) translateY(' + ( height / 3 ) + 'px)';
+      item_span[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -i)) + 'deg)';
+      // item[i].addEventListener('click', function(e){
+      //     checkNavRotate(item[i]);
+      //     nav.style.transform = 'rotate(-' + (rotate * i) + 'deg)';
+      //     for(let index = 0 ; index < item.length ; index++){
+      //       item_span[index].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -(index - i)) + 90) + 'deg)';
+      //     }
+      //     if(document.querySelector('path.active')){
+      //         for(let ii = 0 ; ii < pathElement.length ; ii++){
+      //           if(pathElement[ii] == document.querySelector('path.active')){
+      //             // let active = pathElement.indexOf(document.querySelector('path.active'));
+      //             console.log(ii);
+      //             pathElement[ii].setAttribute('d', describeArc(300,300, (height / 2 - 50) ,rotate * (ii) + 1 ,rotate * (ii + 1 ) - 1));
+      //           }
+      //         }
+      //         document.querySelector('path.active').classList.remove('active');
+
+      //       }
+      //       setTimeout(() => {
+      //       pathElement[(i + item.length + 1) % 6].classList.add('active');
+      //       pathElement[(i + item.length + 1) % 6].setAttribute('d', describeArc(300,300, (height / 2 - 25) ,rotate * (i + 1) + 1 ,rotate * (i + 2 ) - 1));
+      //       }, 500);
+      // })
+    }
+    for(let i = 0; i< item.length;i++){
+      item[i].addEventListener('click' , function(){
+        checkNavRotate(pathElement[i], pathElement);
+        nav.style.transform = 'rotate(-' + (rotate * i) + 'deg)';
+        for(let index = 0 ; index < item.length ; index++){
+          item_span[index].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -(index - i))) + 'deg)';
+        }
+        if(document.querySelector('path.active')){
+          for(let ii = 0 ; ii < pathElement.length ; ii++){
+            if(pathElement[ii] == document.querySelector('path.active')){
+              // let active = pathElement.indexOf(document.querySelector('path.active'));
+              console.log(ii);
+              pathElement[ii].setAttribute('d', describeArc(height / 2,height / 2, (height / 2 - 50) ,rotate * (ii + 1) + 1 ,rotate * (ii + 2 ) - 1));
+            }
+          }
+          document.querySelector('path.active').classList.remove('active');
+        }
+        setTimeout(() => {
+          pathElement[i].classList.add('active');
+          pathElement[i].setAttribute('d', describeArc(height / 2,height / 2, (height / 2 - 25) ,rotate * (i + 1) + 1 ,rotate * (i + 2 ) - 1));
+        }, 500);
+      })
+    }
+    // item[0].style.display = 'none';
+    // item_span[0].style.display = 'none';
+    // pathElement[0].style.display = 'none';
+  })
+  function checkNavRotate (element, pathElement){
+    let nowActive = false;
+    let clickEl = false;
+    if(document.querySelector('path.active')){
+      for(let ii = 0 ; ii < pathElement.length ; ii++){
+        if(pathElement[ii] == document.querySelector('path.active')){
+          nowActive = ii;
+        }
+        if(pathElement[ii] == element){
+          clickEl = ii;
+        }
+      }
+    }
+    console.log({clickEl, nowActive, pathElement:pathElement.length}, '基準點')
+    let Shortest = 0 ;
+    clickEl = clickEl - nowActive;
+    nowActive = nowActive - nowActive;
+    if(Math.abs(clickEl) > (pathElement.length / 2)){
+      console.log('有超過')
+      clickEl = Math.abs(clickEl) - pathElement.length;
+    }
+    console.log({clickEl, nowActive, pathElement:pathElement.length}, '基準點結算')
+    Shortest = clickEl;
+  }
+
+  function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+    var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
+
+    return {
+      x: centerX + (radius * Math.cos(angleInRadians)),
+      y: centerY + (radius * Math.sin(angleInRadians))
+    };
+  }
+
+  function describeArc(x, y, radius, startAngle, endAngle){
+
+      var start = polarToCartesian(x, y, radius, endAngle);
+      var start2 = polarToCartesian(x, y, radius - 100, endAngle);
+      var end = polarToCartesian(x, y, radius, startAngle);
+      var end2 = polarToCartesian(x, y, radius -100, startAngle);
+
+      var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+      var d = [
+          "M", start2.x , start2.y,
+          "L", start.x, start.y,
+          "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+          "L", end2.x, end2.y,
+          "A", radius, radius, 0, largeArcFlag, 1, start2.x, start2.y,
+          // "L", end.x - 20, end.y - 20,
+          // "A", radius, radius, 0, largeArcFlag, 0, start.x -20, start.y -20,
+      ].join(" ");
+
+      return d;       
+  }
+
+  </script>
+</body>
+
+</html>
