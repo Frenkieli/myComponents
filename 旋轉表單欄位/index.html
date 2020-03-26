@@ -100,53 +100,53 @@
     window.addEventListener('load',function(e){
     
 
-    window.addEventListener('resize', function(){
-      svg.innerHTML = '';
-      height = nav.offsetHeight;
-      height_d_2 = height / 2;
-      height_d_3 = height / 3;
-      item = document.getElementsByClassName('item');
-      item_span = document.getElementsByClassName('item_span');
-      rotate = 360 / item.length;
-      rotate_d_2 = rotate / 2;
-      console.log(document.body.offsetWidth);
-      svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      content = document.getElementsByClassName('content')[0];
-      // console.log(content.offsetWidth, content.offsetHeight)
-      svg.style.width = content.offsetWidth + 'px';
-      svg.style.height = content.offsetHeight + 'px';
-      contentWidth = content.offsetWidth;
-      contentHeight = content.offsetHeight;
-      svg.setAttributeNS('http://www.w3.org/2000/svg', 'width', contentWidth);
-      svg.setAttributeNS('http://www.w3.org/2000/svg', 'height', contentHeight);
+    // window.addEventListener('resize', function(){
+    //   svg.innerHTML = '';
+    //   height = nav.offsetHeight;
+    //   height_d_2 = height / 2;
+    //   height_d_3 = height / 3;
+    //   item = document.getElementsByClassName('item');
+    //   item_span = document.getElementsByClassName('item_span');
+    //   rotate = 360 / item.length;
+    //   rotate_d_2 = rotate / 2;
+    //   console.log(document.body.offsetWidth);
+    //   svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    //   content = document.getElementsByClassName('content')[0];
+    //   // console.log(content.offsetWidth, content.offsetHeight)
+    //   svg.style.width = content.offsetWidth + 'px';
+    //   svg.style.height = content.offsetHeight + 'px';
+    //   contentWidth = content.offsetWidth;
+    //   contentHeight = content.offsetHeight;
+    //   svg.setAttributeNS('http://www.w3.org/2000/svg', 'width', contentWidth);
+    //   svg.setAttributeNS('http://www.w3.org/2000/svg', 'height', contentHeight);
 
-      nav.appendChild(svg);
-      // 
-      pathElement = [];
-      if(document.body.offsetWidth < 600){
-        shiftDeg = 180;
-        rotateNow = 0;
-      }else{
-        shiftDeg = 90;
-        rotateNow = 0;
-      }
-      for(let i = 0 ; i < item.length ; i++){
-        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        if(i == 0){
-          path.classList.add('active');
-        }
-        path.setAttribute('fill', color[i % color.length]);
-        setSvgDeg(path, -50, rotate * i + 2, rotate * (i + 1) - 2);
-        svg.appendChild(path);
-        pathElement.push(path);
-        // console.log(item[i]);
+    //   nav.appendChild(svg);
+    //   // 
+    //   pathElement = [];
+    //   if(document.body.offsetWidth < 600){
+    //     shiftDeg = 180;
+    //     rotateNow = 0;
+    //   }else{
+    //     shiftDeg = 90;
+    //     rotateNow = 0;
+    //   }
+    //   for(let i = 0 ; i < item.length ; i++){
+    //     let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    //     if(i == 0){
+    //       path.classList.add('active');
+    //     }
+    //     path.setAttribute('fill', color[i % color.length]);
+    //     setSvgDeg(path, -50, rotate * i + 2, rotate * (i + 1) - 2);
+    //     svg.appendChild(path);
+    //     pathElement.push(path);
+    //     // console.log(item[i]);
 
-        // 文字方塊
-        item[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * i) + shiftDeg) + 'deg) translateY(' + ( -height_d_3 ) + 'px)';
-        // 將文字轉回來
-        item_span[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -i) - shiftDeg) + 'deg)';
-      }
-    })
+    //     // 文字方塊
+    //     item[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * i) + shiftDeg) + 'deg) translateY(' + ( -height_d_3 ) + 'px)';
+    //     // 將文字轉回來
+    //     item_span[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -i) - shiftDeg) + 'deg)';
+    //   }
+    // })
 
     // 畫SVG
 
