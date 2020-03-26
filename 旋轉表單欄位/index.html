@@ -22,8 +22,8 @@
     }
     .container>div{
       position: relative;
-      width: 50%;
-      padding-bottom: 50%;
+      width: 100%;
+      padding-bottom: 100%;
       font-size: 16px;
       display: inline-block;
     }
@@ -85,16 +85,68 @@
   </div>
   <script>
     let color= ['#ccc','#0fa','#af0','#f0a','#fa0','#a0f','#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
-    window.addEventListener('load',function(e){
-    
     let nav = document.getElementById('nav');
     let height = nav.offsetHeight;
+    let height_d_2 = height / 2;
+    let height_d_3 = height / 3;
     let item = document.getElementsByClassName('item');
     let item_span = document.getElementsByClassName('item_span');
     let rotate = 360 / item.length;
+    let rotate_d_2 = rotate / 2;
     let navRotate = 0;
+    let shiftDeg = 90; //用來決定偏移多少
+    let rotateNow = 0;
+    let setTimeoutSvg;
+    window.addEventListener('load',function(e){
+    
 
+    window.addEventListener('resize', function(){
+      svg.innerHTML = '';
+      height = nav.offsetHeight;
+      height_d_2 = height / 2;
+      height_d_3 = height / 3;
+      item = document.getElementsByClassName('item');
+      item_span = document.getElementsByClassName('item_span');
+      rotate = 360 / item.length;
+      rotate_d_2 = rotate / 2;
+      console.log(document.body.offsetWidth);
+      svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      content = document.getElementsByClassName('content')[0];
+      // console.log(content.offsetWidth, content.offsetHeight)
+      svg.style.width = content.offsetWidth + 'px';
+      svg.style.height = content.offsetHeight + 'px';
+      contentWidth = content.offsetWidth;
+      contentHeight = content.offsetHeight;
+      svg.setAttributeNS('http://www.w3.org/2000/svg', 'width', contentWidth);
+      svg.setAttributeNS('http://www.w3.org/2000/svg', 'height', contentHeight);
 
+      nav.appendChild(svg);
+      // 
+      pathElement = [];
+      if(document.body.offsetWidth < 600){
+        shiftDeg = 180;
+        rotateNow = 0;
+      }else{
+        shiftDeg = 90;
+        rotateNow = 0;
+      }
+      for(let i = 0 ; i < item.length ; i++){
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        if(i == 0){
+          path.classList.add('active');
+        }
+        path.setAttribute('fill', color[i % color.length]);
+        setSvgDeg(path, -50, rotate * i + 2, rotate * (i + 1) - 2);
+        svg.appendChild(path);
+        pathElement.push(path);
+        // console.log(item[i]);
+
+        // 文字方塊
+        item[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * i) + shiftDeg) + 'deg) translateY(' + ( -height_d_3 ) + 'px)';
+        // 將文字轉回來
+        item_span[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -i) - shiftDeg) + 'deg)';
+      }
+    })
 
     // 畫SVG
 
@@ -111,70 +163,109 @@
     nav.appendChild(svg);
     // 
     let pathElement = [];
+
     for(let i = 0 ; i < item.length ; i++){
       let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      if(i == 0){
+        path.classList.add('active');
+      }
       path.setAttribute('fill', color[i % color.length]);
-      // M 1461 3194 A1600 1600 0 0 0 1511 3197
-      path.setAttribute('d', describeArc(height / 2,height / 2, (height / 2 - 50) ,rotate * (i) + 2,rotate * (i + 1) - 2));
+      setSvgDeg(path, -50, rotate * i + 2, rotate * (i + 1) - 2);
       svg.appendChild(path);
       pathElement.push(path);
       // console.log(item[i]);
-      // console.log('translate(-50% -50%) rotate(' + (rotate * i) + 'deg) translateY(' + ( height / 3 ) + 'px)');
-      item[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * i + (rotate / 2))) + 'deg) translateY(' + ( height / -3 ) + 'px)';
-      item_span[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -i - (rotate / 2))) + 'deg)';
+
+      // 文字方塊
+      item[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * i) + shiftDeg) + 'deg) translateY(' + ( -height_d_3 ) + 'px)';
+      // 將文字轉回來
+      item_span[i].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -i) - shiftDeg) + 'deg)';
     }
     for(let i = 0; i< item.length;i++){
       item[i].addEventListener('click' , function(){
-        checkNavRotate(pathElement[i], pathElement);
-        nav.style.transform = 'rotate(-' + (rotate * i) + 'deg)';
+        let shiftMultiply = checkNavRotate(pathElement[i], pathElement);
+        rotateNow = rotateNow + rotate * shiftMultiply;
+        console.log('%c'+shiftMultiply + '    %c' + rotateNow, 'color:red;', 'color:#00f;');
+        nav.style.transform = 'rotate(' + rotateNow + 'deg)';
         for(let index = 0 ; index < item.length ; index++){
-          item_span[index].style.transform = 'translate(-50%, -50%) rotate(' + ((rotate * -(index - i) - (rotate / 2))) + 'deg)';
+          // 將文字轉回來
+          item_span[index].style.transform = 'translate(-50%, -50%) rotate(' + ((-rotateNow + (rotate * -index) - shiftDeg)) + 'deg)';
         }
         if(document.querySelector('path.active')){
           for(let ii = 0 ; ii < pathElement.length ; ii++){
             if(pathElement[ii] == document.querySelector('path.active')){
               // let active = pathElement.indexOf(document.querySelector('path.active'));
-              console.log(ii);
-              pathElement[ii].setAttribute('d', describeArc(height / 2,height / 2, (height / 2 - 50) ,rotate * (ii) + 2,rotate * (ii + 1) - 2));
+              // console.log(ii);
+              setSvgDeg(pathElement[ii], -50, rotate * (ii) + 2, rotate * (ii + 1) - 2);
             }
           }
           document.querySelector('path.active').classList.remove('active');
         }
-        setTimeout(() => {
-          pathElement[i].classList.add('active');
-          pathElement[i].setAttribute('d', describeArc(height / 2,height / 2, (height / 2 - 25) ,rotate * (i) + 2,rotate * (i + 1) - 2));
+        clearTimeout(setTimeoutSvg);
+        pathElement[i].classList.add('active');
+        setTimeoutSvg = setTimeout(() => {
+          setSvgDeg(pathElement[i], -25, rotate * (i) + 2,rotate * (i + 1) - 2);
         }, 500);
       })
     }
-    // item[0].style.display = 'none';
-    // item_span[0].style.display = 'none';
-    // pathElement[0].style.display = 'none';
   })
   function checkNavRotate (element, pathElement){
+    let multiply = 0;
+    let newArray = [...pathElement];
+
     let nowActive = false;
     let clickEl = false;
-    if(document.querySelector('path.active')){
-      for(let ii = 0 ; ii < pathElement.length ; ii++){
-        if(pathElement[ii] == document.querySelector('path.active')){
-          nowActive = ii;
-        }
-        if(pathElement[ii] == element){
-          clickEl = ii;
-        }
+    for(let ii = 0 ; ii < pathElement.length ; ii++){
+      if(pathElement[ii] == document.querySelector('path.active')){
+        nowActive = ii;
+      }
+      if(pathElement[ii] == element){
+        clickEl = ii;
       }
     }
     console.log({clickEl, nowActive, pathElement:pathElement.length}, '基準點')
-    let Shortest = 0 ;
-    clickEl = clickEl - nowActive;
-    nowActive = nowActive - nowActive;
-    if(Math.abs(clickEl) > (pathElement.length / 2)){
-      console.log('有超過')
-      clickEl = Math.abs(clickEl) - pathElement.length;
+    newArray.splice(nowActive, 1);
+    let newArrayLength_d_2 = newArray.length / 2;
+    let forwardArray = [];
+    let backwardArray = [];
+    forwardArray = newArray.splice(nowActive, Math.floor(newArrayLength_d_2));
+    if(forwardArray.length < Math.floor(newArrayLength_d_2)){
+      forwardArray = [...forwardArray, ...newArray.splice(0, Math.floor(newArrayLength_d_2) - forwardArray.length)];
+      console.log('有切')
+      backwardArray = newArray.reverse();
+    }else{
+      let lastArray = newArray.splice(nowActive, Math.floor(newArrayLength_d_2));
+      backwardArray = [...newArray.reverse(), ...lastArray.reverse()];
     }
-    console.log({clickEl, nowActive, pathElement:pathElement.length}, '基準點結算')
-    Shortest = clickEl;
+    // backwardArray = backwardArray.reverse();
+    if(forwardArray.indexOf(element) !== -1){
+      console.log('forwardArray', forwardArray.indexOf(element));
+      multiply = -(forwardArray.indexOf(element) + 1);
+    }
+    if(backwardArray.indexOf(element) !== -1){
+      // let ii = backwardArray.indexOf(element);
+      console.log('backwardArray', backwardArray.indexOf(element));
+      multiply = (backwardArray.indexOf(element) + 1);
+      // debugger;
+    }
+    return multiply;
+    console.log({forwardArray,backwardArray});
   }
 
+
+
+
+  // 調整svg用的
+  function setSvgDeg(svgElement, shiftR, strDeg, endDeg){
+    svgElement.setAttribute('d', describeArc(height_d_2,
+                                            height_d_2,
+                                            (height_d_2 + shiftR),
+                                            strDeg - rotate_d_2 + shiftDeg,
+                                            endDeg - rotate_d_2 + shiftDeg))
+  }
+
+
+
+  // 畫svg用的
   function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
 
