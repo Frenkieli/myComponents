@@ -167,7 +167,7 @@
     for(let i = 0 ; i < item.length ; i++){
       let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       if(i == 0){
-        path.classList.add('active');
+        path.setAttribute('class', 'active');
       }
       path.setAttribute('fill', color[i % color.length]);
       setSvgDeg(path, -50, rotate * i + 2, rotate * (i + 1) - 2);
@@ -198,10 +198,11 @@
               setSvgDeg(pathElement[ii], -50, rotate * (ii) + 2, rotate * (ii + 1) - 2);
             }
           }
-          document.querySelector('path.active').classList.remove('active');
+          document.querySelector('path.active').setAttribute('class', '');
+          
         }
         clearTimeout(setTimeoutSvg);
-        pathElement[i].classList.add('active');
+        pathElement[i].setAttribute('class', 'active');
         setTimeoutSvg = setTimeout(() => {
           setSvgDeg(pathElement[i], -25, rotate * (i) + 2,rotate * (i + 1) - 2);
         }, 500);

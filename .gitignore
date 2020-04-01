@@ -1,0 +1,14 @@
+# 這兩個資料夾不要上傳
+node_modules/
+dist/
+# 這個好像是parcel產生的，這個應該是用不到
+.cache/
+
+# 忽略本地端錯誤
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*

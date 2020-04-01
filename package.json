@@ -1,0 +1,44 @@
+{
+  "name": "myComponents",
+  "version": "1.0.0",
+  "description": "做出來的功能放在這邊查詢",
+  "main": "d3.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frenkieli/myComponents.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Frenkieli/myComponents/issues"
+  },
+  "homepage": "https://github.com/Frenkieli/myComponents#readme",
+  "devDependencies": {
+    "@types/react": "^15.0.0 || ^16.0.0",
+    "babel-core": "^6.26.3",
+    "cssnano": "^4.1.10",
+    "parcel-bundler": "^1.12.4",
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0",
+    "react-hot-loader": "^4.12.20",
+    "sass": "^1.26.3"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.7.5",
+    "postcss-modules": "^1.5.0"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {
+        "overrideBrowserslist": [
+          "> 1%",
+          "last 2 versions"
+        ]
+      }
+    }
+  }
+}
