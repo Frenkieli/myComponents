@@ -6,37 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>彈窗提示組件</title>
-    <style>
+    <!-- <style>
         .popMessage{ 
             position : fixed;
             right    :  25px ;
             bottom   :  25px ;
             max-width: 30%;
-        };
-        .popMessage * {
+        }
+        .popMessage *{
             padding: 0;
             margin: 0;
             box-sizing: border-box;
+            font-family: sans-serif , monospace;
         }
         .popMessage .popMessage_card{
-            border: 1px solid rgba(0,0,0,0.8);
+            overflow: hidden;
             position : relative;
+            border: 1px solid rgba(0,0,0,0.8);
             margin : 10px;
             font-size : 22px;
-            padding : 15px;
             border-radius : 15px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .popMessage .popMessage_card:hover{
+            transform: translateX(-15px);
         }
         .popMessage .popMessage_card_header{
-        
+            padding: 5px 15px;
+            border-bottom: 1px dotted rgba(0,0,0,0.8);
+            background-color: rgba(255,255,255,0.15);
+        } 
+        .popMessage .popMessage_card_header::after{
+            content: '';
+            display: block;
+            clear: both;
         }
         .popMessage_card_header .popMessage_card_title{
-            
+            float: left;
         }
         .popMessage_card_header .popMessage_card_img{
-
+            float: right;
+        }
+        .popMessage_card_header .popMessage_card_img img{
+            vertical-align: middle;
         }
         .popMessage .popMessage_card_body{
-
+            padding: 10px 15px;
+            font-size: 16px;
         }
         @media (max-width: 768px){
             .popMessage{ 
@@ -51,20 +68,26 @@
                 padding : 10px;
                 border-radius : 10px;
             }
-            .popMessage .popMessage_card_header{
-            
-            }
-            .popMessage_card_header .popMessage_card_title{
-                
-            }
-            .popMessage_card_header .popMessage_card_img{
-
+            .popMessage .popMessage_card:hover{
+                transform: translateY(-5px);
             }
             .popMessage .popMessage_card_body{
-
+                font-size: 14px;
             }
         }
-    </style>
+        .popMessage_card.status0{
+            color: #eee;
+            background-color: #1CAF64;
+        }
+        .popMessage_card.status1{
+            color: #eee;
+            background-color: #AF1C1C;
+        }
+        .popMessage_card.status2{
+            color: #0af;
+            background-color: #fa0;
+        }
+    </style> -->
 </head>
 
 <body>
@@ -73,8 +96,8 @@
     <button id='err'>NO</button>
     <button id='cus'>Cus</button>
 
-    <div class="popMessage">
-        <div class="popMessage_card">
+    <!-- <div class="popMessage">
+        <div class="popMessage_card status0">
             <div class="popMessage_card_header">
                 <div class="popMessage_card_title">OK</div>
                 <div class="popMessage_card_img">
@@ -85,7 +108,7 @@
                 這是一段給圈圈的描述這是一段給圈圈的描述這是一段給圈圈的描述
             </div>
         </div>
-        <div class="popMessage_card">
+        <div class="popMessage_card status1">
             <div class="popMessage_card_header">
                 <div class="popMessage_card_title">ERR</div>
                 <div class="popMessage_card_img">
@@ -96,7 +119,7 @@
                 這是一段給叉叉的描述
             </div>
         </div>
-        <div class="popMessage_card">
+        <div class="popMessage_card status2">
             <div class="popMessage_card_header">
                 <div class="popMessage_card_title">FORYOU</div>
                 <div class="popMessage_card_img">
@@ -107,25 +130,25 @@
                 這是一段給自定義的描述
             </div>
         </div>
-    </div>
+    </div> -->
     <script src="popMessage.js"></script>
     <script>
-        popMessage.init();
         popMessage.data({
             color:['#fa0','#0af'],
             backColor:['#0af','#fa0']
         })
+        popMessage.init();
         document.getElementById('ok').addEventListener('click', function () {
             console.log(popMessage);
-            popMessage.ok('可以喔' , 2000);
+            popMessage.ok({title:'ok訊息',content:'可以喔'} , 5000);
         });
         document.getElementById('err').addEventListener('click', function () {
             console.log(popMessage);
-            popMessage.err('不行喔' , 2000);
+            popMessage.err({title:'err訊息',content:'不行喔'} , 5000);
         });
         document.getElementById('cus').addEventListener('click', function () {
             console.log(popMessage);
-            popMessage.cus('客製化',1 , 2000);
+            popMessage.cus({title:'cus1訊息',content:'客製化'},1 , 5000);
         });
     </script>
 </body>
