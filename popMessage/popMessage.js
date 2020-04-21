@@ -6,6 +6,20 @@ var popMessage = (function () {
     },
         status;
 
+    let _init = function(){
+        let body = document.getElementsByTagName("body")[0];
+        // let style = document.createElement('style');
+        // let popWidth = document.body.clientWidth < 600 ? "10px" : "25px";
+        // style.innerHTML = 
+        // '.popMessage{'  +
+        //     'position : fixed;' +
+        //     'right    : ' + popWidth + ';' +
+        //     'bottom    : ' + popWidth + ';' +
+        //     'max-width  : 30%;' +
+        // '}';
+        body.appendChild(style);
+    }
+
 
     let _data = function (arr) {
         colorData.color = ['#eee', '#eee', ...arr.color];
@@ -39,10 +53,11 @@ var popMessage = (function () {
                 document.getElementsByTagName("body")[0].appendChild(pop);
             }, 1);
         }
-        let boxStyle = pop.style;
-        boxStyle.position = "fixed";
-        boxStyle.right = document.body.clientWidth < 600 ? "10px" : "25px";
-        boxStyle.bottom = document.body.clientWidth < 600 ? "10px" : "25px";
+        pop.className = 'popMessage';
+        // let boxStyle = pop.style;
+        // boxStyle.position = "fixed";
+        // boxStyle.right = document.body.clientWidth < 600 ? "10px" : "25px";
+        // boxStyle.bottom = document.body.clientWidth < 600 ? "10px" : "25px";
         // console.log(document)
         let popStr = document.createElement("div");
         let style = popStr.style;
@@ -81,6 +96,7 @@ var popMessage = (function () {
     }
 
     return {
+        init: _init,
         data: _data,
         ok: _ok,
         err: _no,
