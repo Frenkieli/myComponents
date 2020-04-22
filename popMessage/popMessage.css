@@ -1,0 +1,132 @@
+.popMessage {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  max-width: 30%;
+}
+
+.popMessage div,
+.popMessage img {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.popMessage .popMessage_card {
+  float: right;
+  clear: both;
+  overflow: hidden;
+  position: relative;
+  border: 3px double rgba(255, 255, 255, 0.6);
+  margin: 10px;
+  font-size: 22px;
+  border-radius: 15px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  cursor: pointer;
+  -webkit-animation: popMessageAnimation 0.2s;
+          animation: popMessageAnimation 0.2s;
+}
+
+@-webkit-keyframes popMessageAnimation {
+  0% {
+    -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(0%);
+            transform: translateX(0%);
+  }
+}
+
+@keyframes popMessageAnimation {
+  0% {
+    -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(0%);
+            transform: translateX(0%);
+  }
+}
+
+.popMessage .popMessage_card:hover {
+  -webkit-transform: translateX(-15px);
+          transform: translateX(-15px);
+}
+
+.popMessage .popMessage_card_header {
+  padding: 5px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.popMessage .popMessage_card_header::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.popMessage_card_header .popMessage_card_header_item {
+  height: 26px;
+}
+
+.popMessage_card_header .popMessage_card_header_item::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.popMessage_card_header .popMessage_card_title {
+  float: left;
+}
+
+.popMessage_card_header .popMessage_card_img {
+  float: right;
+  font-size: 0;
+}
+
+.popMessage_card_header .popMessage_card_img img {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.popMessage .popMessage_card_body {
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+@media (max-width: 767px) {
+  .popMessage {
+    right: 0px;
+    left: 0;
+    bottom: 0px;
+    max-width: 95%;
+    margin: auto;
+  }
+  .popMessage .popMessage_card {
+    float: unset;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  .popMessage .popMessage_card:hover {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
+  .popMessage .popMessage_card_body {
+    font-size: 14px;
+  }
+  .popMessage_card_header .popMessage_card_header_item {
+    height: 20px;
+  }
+  .popMessage_card_header .popMessage_card_img img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 14px;
+    height: 14px;
+  }
+}
+/*# sourceMappingURL=popMessage.css.map */
