@@ -49,3 +49,10 @@ popMessage('這個是要談出的文字','這個是狀況')
 ```
 
 支援結束時呼叫callback的函式
+
+
+使用typescript重寫
+
+在不使用exprot的情況下不會出錯
+
+未來可能需要用webpack才能正常exprot

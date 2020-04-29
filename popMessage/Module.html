@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>彈窗提示組件</title>
-    <link rel="stylesheet" href="popMessage.css">
+    <link rel="stylesheet" href="css/popMessage.css">
     <!-- <style>
         body {
             font-family: sans-serif, monospace;
@@ -173,12 +173,18 @@
             </div>
         </div>
     </div> -->
-    <script src="popMessage.js"></script>
+
+    <!-- 這樣就好了ㄟ!?三小 -->
+    <script>var exports = {};</script>
+    
+    <script src="javascripts/popMessage.js"></script>
     <script>
-        popMessage.data({
+        let imgFolder = 'images/'
+        let popMessage =new PopMessage();
+        popMessage.addColor({
             color: ['#fa0', '#0af'],
             backColor: ['#0af', '#fa0'],
-            imgSrc: ['叉叉.png', '圈圈.png']
+            imgSrc: [imgFolder + '叉叉.png', imgFolder + '圈圈.png']
         })
         popMessage.init();
         document.getElementById('ok').addEventListener('click', function () {
